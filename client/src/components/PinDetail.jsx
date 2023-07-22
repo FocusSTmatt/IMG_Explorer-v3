@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MdDownloadForOffline } from 'react-icons/md';
 import { Link, useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
@@ -9,7 +9,6 @@ import { pinDetailMorePinQuery, pinDetailQuery } from '../utils/data';
 import Spinner from './Spinner';
 
 const PinDetail = ({ user }) => {
-  const { userId } = useParams() 
   const { pinId } = useParams();
   const [pins, setPins] = useState(null);
   const [pinDetail, setPinDetail] = useState(null);
@@ -38,12 +37,8 @@ const PinDetail = ({ user }) => {
     fetchPinDetails();
   }, [pinId]);
 
-    
-  
-  
-
   const addComment = () => {
-console.log(addComment)
+
       client
         .patch(pinId)
         .setIfMissing({ comments: [] })
@@ -110,7 +105,7 @@ console.log(addComment)
             </Link>
             <h2 className="mt-5 text-2xl">Comments</h2>
             <div className="max-h-370 overflow-y-auto">
-              {/* {pinDetail?.comments?.map((item, index) => (
+              {pinDetail?.comments?.map((item, index) => (
                 <div className="flex gap-2 mt-5 items-center bg-white rounded-lg" key={index}>
                   <img
                     src={item.postedBy?.image}
@@ -122,7 +117,7 @@ console.log(addComment)
                     <p>{item.comment}</p>
                   </div>
                 </div>
-              ))} */}
+              ))}
             </div>
             <div className="flex flex-wrap mt-6 gap-3">
               {/* <Link to={`/user-profile/${user._id}`}>
@@ -138,7 +133,7 @@ console.log(addComment)
               <button
                 type="button"
                 className="bg-red-500 text-white rounded-full px-6 py-2 font-semibold text-base outline-none"
-                onClick={createComment}
+                onClick={addComment}
               >
                 
                 {addingComment ? 'Doing...' : 'Done'}
