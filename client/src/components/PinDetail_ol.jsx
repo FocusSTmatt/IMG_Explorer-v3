@@ -1,21 +1,23 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MdDownloadForOffline } from 'react-icons/md';
 import { Link, useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
+import axios from "axios"
 
 import { client, urlFor } from '../client';
 import MasonryLayout from './MasonryLayout';
-import { pinDetailMorePinQuery, pinDetailQuery } from '../utils/data';
+import { pinDetailMorePinQuery, pinDetailQuery, commentQuery } from '../utils/data';
 import Spinner from './Spinner';
 
 const PinDetail = ({ user }) => {
-  const { userId } = useParams() 
   const { pinId } = useParams();
   const [pins, setPins] = useState(null);
   const [pinDetail, setPinDetail] = useState(null);
   const [comment, setComment] = useState('');
   const [addingComment, setAddingComment] = useState(false);
   const un = JSON.parse(sessionStorage.getItem('user')) 
+
+  const [ queryCommentData, setQueryCommentData ] = useState(pinDetail)
 
   const fetchPinDetails = () => {
     const query = pinDetailQuery(pinId);
@@ -33,18 +35,28 @@ const PinDetail = ({ user }) => {
       });
     }
   };
+  
+
+  const testCommentQuery = () => {
+    console.log(queryCommentData)
+    // client.fetch(`${query}`).then((data) => {
+    //   const queryData = data[0]
+    //   queryData.comments.map((item) => {
+    //     return <h1>{item}</h1>
+    //   })
+    // })
+  }
 
   useEffect(() => {
     fetchPinDetails();
-  }, [pinId]);
 
-    
-  
+    console.log("use Effect Ran")
+  }, []);
   
 
   const addComment = () => {
-console.log(addComment)
-      client
+    fetchPinDetails();
+       client
         .patch(pinId)
         .setIfMissing({ comments: [] })
         .insert('after', 'comments[-1]', [{
@@ -64,12 +76,14 @@ console.log(addComment)
     }
   
 
-  if (!pinDetail) {
-    return (
-      <Spinner message="Showing pin" />
-    );
-  }
+  // if (!pinDetail) {
+  //   return (
+  //     <Spinner message="Showing pin" />
+  //   );
+  // }
   
+  
+
 
   
   return (
@@ -123,6 +137,20 @@ console.log(addComment)
                   </div>
                 </div>
               ))} */}
+
+              {pinDetail.comments.map((item, index) => (
+                <div className="flex gap-2 mt-5 items-center bg-white rounded-lg" key={index}>
+                  <img
+                    src={item.postedBy?.image}
+                    className="w-10 h-10 rounded-full cursor-pointer"
+                    alt="user-profile"
+                  />
+                  <div className="flex flex-col">
+                    <p className="font-bold">{item.postedBy?.userName}</p>
+                    <p>{item.comment}</p>
+                  </div>
+                </div>
+              ))}
             </div>
             <div className="flex flex-wrap mt-6 gap-3">
               {/* <Link to={`/user-profile/${user._id}`}>
@@ -138,7 +166,8 @@ console.log(addComment)
               <button
                 type="button"
                 className="bg-red-500 text-white rounded-full px-6 py-2 font-semibold text-base outline-none"
-                onClick={createComment}
+                // onClick={addComment}
+                onClick={testCommentQuery}
               >
                 
                 {addingComment ? 'Doing...' : 'Done'}
@@ -153,11 +182,11 @@ console.log(addComment)
           More like this
         </h2>
       )}
-      {pins ? (
+      {/* {pins ? (
         <MasonryLayout pins={pins} />
       ) : (
         <Spinner message="Loading more pins" />
-      )}
+      )} */}
     </>
   );
 };

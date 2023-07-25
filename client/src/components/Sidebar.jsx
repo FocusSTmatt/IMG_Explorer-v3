@@ -14,10 +14,6 @@ const Sidebar = ({ closeToggle, user }) => {
     if (closeToggle) closeToggle(false);
   };
 
-  useEffect(() => {
-    console.log(user)
-  })
-
   return (
     <div className="flex flex-col justify-between bg-white h-full overflow-y-scroll min-w-210 hide-scrollbar">
       <div className="flex flex-col">
