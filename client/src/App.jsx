@@ -1,11 +1,32 @@
 import './App.css'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import Home from './container/Home'
 import Login from './components/Login'
 
 function App() {
+  const [theme, setTheme] = useState("light")
 
+  useEffect(() => {
+    if(theme === "dark"){
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  })
+
+  useEffect(() => {
+    if(theme === "dark"){
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [theme])
+  
+  const handleThemeSwitch = () => {
+    setTheme(theme === "dark" ? "light" : "dark")
+  }
+  
   const navigate = useNavigate();
 
   useEffect(() => {

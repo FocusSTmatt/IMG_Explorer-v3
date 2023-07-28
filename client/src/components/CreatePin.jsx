@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AiOutlineCloudUpload } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import { MdDelete } from 'react-icons/md';
@@ -18,7 +18,7 @@ const CreatePin = ({ user }) => {
   const [wrongImageType, setWrongImageType] = useState(false);
 
   const navigate = useNavigate();
-
+  
   const uploadImage = (e) => {
     const selectedFile = e.target.files[0];
     // uploading asset to sanity
@@ -62,7 +62,8 @@ const CreatePin = ({ user }) => {
         category,
       };
       client.create(doc).then(() => {
-        navigate('/');
+            navigate('/');
+         
       });
     } else {
       setFields(true);
@@ -75,6 +76,12 @@ const CreatePin = ({ user }) => {
       );
     }
   };
+
+  useEffect(() => {
+    console.log("Pin Added")
+  },[setFields])
+
+
   return (
     <div className="flex flex-col justify-center items-center mt-5 lg:h-4/5">
       {fields && (
@@ -133,15 +140,8 @@ const CreatePin = ({ user }) => {
         </div>
 
         <div className="flex flex-1 flex-col gap-6 lg:pl-5 mt-5 w-full">
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Add your title"
-            className="outline-none text-2xl sm:text-3xl font-bold border-b-2 border-gray-200 p-2"
-          />
-          {user && (
-            <div className="flex gap-2 mt-2 mb-2 items-center bg-white rounded-lg ">
+        {user && (
+            <div className="flex justify-center gap-2 mt-2 mb-2 items-center bg-white rounded-lg ">
               <img
                 src={user.image}
                 className="w-10 h-10 rounded-full"
@@ -150,6 +150,14 @@ const CreatePin = ({ user }) => {
               <p className="font-bold">{user.userName}</p>
             </div>
           )}
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Add your title"
+            className="outline-none text-2xl sm:text-3xl font-bold border-b-2 border-gray-200 p-2"
+          />
+          
           <input
             type="text"
             value={about}

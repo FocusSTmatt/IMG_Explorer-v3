@@ -1,6 +1,6 @@
 module.exports = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './index.html'],
-  darkMode: false, // or 'media' or 'class'
+  darkMode: 'class', // or 'media' or 'class'
   theme: {
     extend: {
       margin: {
@@ -45,6 +45,7 @@ module.exports = {
         navColor: '#BEBEBE',
       },
       backgroundColor: {
+        dark: '#1a1918',
         mainColor: '#FBF8F9',
         secondaryColor: '#F0F0F0',
         blackOverlay: 'rgba(0, 0 ,0 ,0.7)',

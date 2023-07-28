@@ -1,22 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { RiHomeFill } from 'react-icons/ri';
 import { IoIosArrowForward } from 'react-icons/io';
+import { BsMoon, BsMoonFill, BsSun, BsSunFill } from "react-icons/bs"
 import logo from '../assets/logo.png';
 import { categories } from '../utils/data';
 import { useEffect } from 'react';
 
-const isNotActiveStyle = 'flex items-center px-5 gap-3 text-gray-500 hover:text-black transition-all duration-200 ease-in-out capitalize';
-const isActiveStyle = 'flex items-center px-5 gap-3 font-extrabold border-r-2 border-black  transition-all duration-200 ease-in-out capitalize';
+const isNotActiveStyle = 'flex items-center px-5 gap-3 text-gray-500 dark:text-white hover:text-black transition-all duration-200 ease-in-out capitalize';
+const isActiveStyle = 'flex items-center px-5 gap-3 font-extrabold dark:text-white border-r-2 border-black  transition-all duration-200 ease-in-out capitalize';
 
 const Sidebar = ({ closeToggle, user }) => {
+  const [theme, setTheme] = useState("light")
+
+  useEffect(() => {
+    if(theme === "dark"){
+      localStorage.setItem("theme", "dark")
+    } else {
+      localStorage.setItem("theme", "light")
+    }
+  })
+
+  useEffect(() => {
+    if(theme === "dark"){
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [theme])
+  
+  const handleThemeSwitch = () => {
+    setTheme(theme === "dark" ? "light" : "dark")
+  }
+  
   const handleCloseSidebar = () => {
     if (closeToggle) closeToggle(false);
   };
 
   return (
-    <div className="flex flex-col justify-between bg-white h-full overflow-y-scroll min-w-210 hide-scrollbar">
-      <div className="flex flex-col">
+    <div className="flex flex-col justify-between dark:bg-dark bg-white h-full overflow-y-scroll min-w-210 hide-scrollbar">
+      <div className="flex flex-col"> 
+        <div className='flex flex-row p-2'>
+          {theme === "light" ? <BsMoon onClick={handleThemeSwitch} size={25} className='mr-2' /> : <BsMoonFill className='mr-2' onClick={handleThemeSwitch} size={25} />}
+          {theme === "light" ? <BsSunFill onClick={handleThemeSwitch} size={27} /> : <BsSun onClick={handleThemeSwitch} size={27} />}
+        </div>
+        
+
         <Link
           to="/"
           className="flex px-5 gap-2 my-6 pt-1 w-190 items-center"
@@ -34,7 +63,7 @@ const Sidebar = ({ closeToggle, user }) => {
             <RiHomeFill />
             Home
           </NavLink>
-          <h3 className="mt-2 px-5 text-base 2xl:text-xl">Discover cateogries</h3>
+          <h3 className="mt-2 px-5 text-base 2xl:text-xl dark:text-white">Discover cateogries</h3>
           {categories.slice(0, categories.length - 1).map((category) => (
             <NavLink
               to={`/category/${category.name}`}

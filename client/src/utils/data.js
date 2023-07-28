@@ -110,8 +110,45 @@ export const pinDetailQuery = (pinId) => {
   return query;
 };
 
-export const commentQuery = (pinId) => {
-  const query = `*[_type == "pin" && _id == '${pinId}']{
+export const pinDetailQuery2 = (pinId) => {
+  const query2 = `*[_type == "comment"]{
+    comments[]{
+      comment,
+      _key,
+      postedBy->{
+        _id,
+        userName,
+        image
+      },
+    }
+  }`;
+  return query2;
+};
+
+export const commentQuery = () => {
+  const query = `*[_type == "pin" && _id == _key == '29d58720-ebc8-42db-8c7d-69f8c6da2a05']{
+    image{
+      asset->{
+        url
+      }
+    },
+    _id,
+    title, 
+    about,
+    category,
+    destination,
+    postedBy->{
+      _id,
+      userName,
+      image
+    },
+   save[]{
+      postedBy->{
+        _id,
+        userName,
+        image
+      },
+    },
     comments[]{
       comment,
       _key,
