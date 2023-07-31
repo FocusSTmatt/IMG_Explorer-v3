@@ -7,10 +7,13 @@ import { Sidebar, UserProfile } from '../components';
 import { userQuery } from '../utils/data';
 import { client } from '../client';
 import Pins from './Pins';
-import logo from '../assets/logo.png';
+import logoB from '../assets/logo-b.png';
+import logoW from '../assets/logo-w.png';
+import Logo from '../components/Logo';
 
-const Home = () => {
+const Home = ({theme, isActive}) => {
   const [toggleSidebar, setToggleSidebar] = useState(false);
+  const [ logoTheme, setLogoTheme ] = useState(localStorage.getItem("theme"))
   const [user, setUser] = useState();
   const scrollRef = useRef(null);
 
@@ -29,16 +32,26 @@ const Home = () => {
     scrollRef.current.scrollTo(0, 0);
   });
 
+  useEffect(() => {
+    console.log("logo theme changed in Home")
+  }, [logoTheme]);
+
+  const test = () => {
+    console.log(logoTheme)
+    console.log(theme)
+    
+  }
   return (
-    <div className="flex bg-gray-50 dark:bg-dark dark:text-white md:flex-row flex-col h-screen transition-height duration-75 ease-out">
+    <div className="flex bg-gray-100 dark:bg-dark dark:text-white md:flex-row flex-col h-screen transition-height duration-75 ease-out">
       <div className="hidden md:flex h-screen flex-initial">
         <Sidebar user={user && user} />
       </div>
       <div className="flex md:hidden flex-row">
-        <div className="p-2 w-full flex flex-row justify-between items-center shadow-md">
+        <div className="p-2 w-full flex flex-row justify-between dark:bg-black items-center shadow-md">
           <HiMenu fontSize={40} className="cursor-pointer" onClick={() => setToggleSidebar(true)} />
           <Link to="/">
-            <img src={logo} alt="logo" className="w-28 dark:text-white" />
+            <img src={logoW} alt="logo" width={150} className="pt-1 hidden dark:block" />
+            <img src={logoB} alt="logo" width={150} className="pt-1 block dark:hidden" />
           </Link>
           <Link to={`user-profile/${user?._id}`}>
             <img src={user?.image} alt="user-pic" className="w-9 h-9 rounded-full " />

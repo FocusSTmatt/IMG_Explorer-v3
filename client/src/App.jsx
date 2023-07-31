@@ -4,16 +4,17 @@ import { Route, Routes, useNavigate } from 'react-router-dom'
 import Home from './container/Home'
 import Login from './components/Login'
 
-function App() {
+ function App() {
   const [theme, setTheme] = useState("light")
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    if(theme === "dark"){
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  })
+  // useEffect(() => {
+  //   if(theme === "dark"){
+  //     document.documentElement.classList.add("dark");
+  //   } else {
+  //     document.documentElement.classList.remove("dark");
+  //   }
+  // })
 
   useEffect(() => {
     if(theme === "dark"){
@@ -26,8 +27,6 @@ function App() {
   const handleThemeSwitch = () => {
     setTheme(theme === "dark" ? "light" : "dark")
   }
-  
-  const navigate = useNavigate();
 
   useEffect(() => {
     const userInfo = sessionStorage.getItem('user') !== 'undefined' ? JSON.parse(sessionStorage.getItem('user')) : sessionStorage.clear();
@@ -45,4 +44,4 @@ function App() {
   )
 }
 
-export default App
+export default App 

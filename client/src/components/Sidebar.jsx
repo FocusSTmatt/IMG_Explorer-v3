@@ -6,31 +6,46 @@ import { BsMoon, BsMoonFill, BsSun, BsSunFill } from "react-icons/bs"
 import logo from '../assets/logo.png';
 import { categories } from '../utils/data';
 import { useEffect } from 'react';
+import Logo from '../components/Logo';
 
 const isNotActiveStyle = 'flex items-center px-5 gap-3 text-gray-500 dark:text-white hover:text-black transition-all duration-200 ease-in-out capitalize';
 const isActiveStyle = 'flex items-center px-5 gap-3 font-extrabold dark:text-white border-r-2 border-black  transition-all duration-200 ease-in-out capitalize';
 
 const Sidebar = ({ closeToggle, user }) => {
-  const [theme, setTheme] = useState("light")
+  const [theme, setTheme] = useState(localStorage.getItem("theme"))
 
   useEffect(() => {
-    if(theme === "dark"){
-      localStorage.setItem("theme", "dark")
-    } else {
+    if(theme === "light"){
       localStorage.setItem("theme", "light")
-    }
-  })
-
-  useEffect(() => {
-    if(theme === "dark"){
-      document.documentElement.classList.add("dark");
+      document.getElementById("body").classList.remove("dark")
+      document.getElementById("body").classList.add("light")
     } else {
-      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "dark")
+      document.getElementById("body").classList.remove("light")
+      document.getElementById("body").classList.add("dark")
     }
   }, [theme])
-  
+
   const handleThemeSwitch = () => {
-    setTheme(theme === "dark" ? "light" : "dark")
+    console.log("handleThemeSwitch Ran")
+    theme === "light" ? setTheme("dark") : setTheme("light");
+
+    if(theme === "light"){
+      localStorage.setItem("theme", "light")
+      // document.getElementById("body").classList.remove("dark")
+      document.getElementById("body").classList.remove("dark")
+      document.getElementById("body").classList.add("light")
+    } else if(theme === "dark") {
+      localStorage.setItem("theme", "dark")
+      // document.getElementById("body").classList.remove("light")
+      document.getElementById("body").classList.remove("light")
+      document.getElementById("body").classList.add("dark")
+    }
+  }
+  
+  const test = () => {
+    
+    // console.log(theme)
   }
   
   const handleCloseSidebar = () => {
@@ -38,11 +53,11 @@ const Sidebar = ({ closeToggle, user }) => {
   };
 
   return (
-    <div className="flex flex-col justify-between dark:bg-dark bg-white h-full overflow-y-scroll min-w-210 hide-scrollbar">
+    <div className="flex flex-col justify-between dark:bg-black bg-white h-full overflow-y-scroll min-w-210 hide-scrollbar">
       <div className="flex flex-col"> 
         <div className='flex flex-row p-2'>
-          {theme === "light" ? <BsMoon onClick={handleThemeSwitch} size={25} className='mr-2' /> : <BsMoonFill className='mr-2' onClick={handleThemeSwitch} size={25} />}
-          {theme === "light" ? <BsSunFill onClick={handleThemeSwitch} size={27} /> : <BsSun onClick={handleThemeSwitch} size={27} />}
+          {theme === "light" ? <BsMoon onClick={handleThemeSwitch} size={25} className='mr-2 z-10'  /> : <BsMoonFill className='mr-2 z-10' onClick={handleThemeSwitch} size={25} />}
+          {theme === "light" ? <BsSunFill onClick={handleThemeSwitch} size={27} className='z-10' /> : <BsSun className='z-10' onClick={handleThemeSwitch} size={27} />}
         </div>
         
 
@@ -51,7 +66,8 @@ const Sidebar = ({ closeToggle, user }) => {
           className="flex px-5 gap-2 my-6 pt-1 w-190 items-center"
           onClick={handleCloseSidebar}
         >
-          <img src={logo} alt="logo" className="w-full" />
+          {/* <img src="http://static.showit.co/200/eXYNQuDsRwWSHalfXbRjgQ/68795/logo_bug.png" width='70px' height='60px' alt="logo" className="" /> */}
+          <Logo theme={theme} />
         </Link>
         <div className="flex flex-col gap-5">
 
@@ -63,7 +79,7 @@ const Sidebar = ({ closeToggle, user }) => {
             <RiHomeFill />
             Home
           </NavLink>
-          <h3 className="mt-2 px-5 text-base 2xl:text-xl dark:text-white">Discover cateogries</h3>
+          <h3 className="mt-2 px-5 text-base 2xl:text-xl dark:text-lightGray">Discover cateogries</h3>
           {categories.slice(0, categories.length - 1).map((category) => (
             <NavLink
               to={`/category/${category.name}`}
@@ -77,10 +93,11 @@ const Sidebar = ({ closeToggle, user }) => {
           ))}
         </div>
       </div>
+      <button onClick={test}>test</button>
       {user && (
         <Link
           to={`user-profile/${user._id}`}
-          className="flex my-5 mb-3 gap-2 p-2 items-center bg-white rounded-lg shadow-lg mx-3"
+          className="flex my-5 mb-3 gap-2 p-2 items-center dark:bg-dark bg-white rounded-lg shadow-lg mx-3"
           onClick={handleCloseSidebar}
         >
           <img src={user.image} className="w-10 h-10 rounded-full" alt="user-profile" />

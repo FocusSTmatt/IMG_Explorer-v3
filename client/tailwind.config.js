@@ -39,6 +39,7 @@ module.exports = {
         620: '620px',
       },
       textColor: {
+        silver: "#F1EFEE",
         lightGray: '#F1EFEE',
         primary: '#FAFAFA',
         secColor: '#efefef',
